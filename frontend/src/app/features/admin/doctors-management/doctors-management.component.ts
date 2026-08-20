@@ -183,7 +183,7 @@ export class DoctorsManagementComponent implements OnInit {
       });
     } else {
       this.adminService.addDoctor(this.doctorForm).subscribe({
-        next: (newDoc) => {
+        next: (newDoc: any) => {
           this.doctors.unshift(newDoc || { ...this.doctorForm, _id: 'doc_' + Date.now() });
           this.applyFilter();
           this.closeModal();

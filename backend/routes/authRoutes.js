@@ -9,7 +9,4 @@ router.post('/register', registerUser);
 // مسار تسجيل الدخول
 router.post('/login', loginUser);
 
-// مسار إحصائيات الأدمن
-router.get('/admin/stats', protect, checkRole(['admin']), getAdminStats);
-
 module.exports = router;

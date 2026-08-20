@@ -32,64 +32,26 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap((response) => {
         if (response.token) localStorage.setItem('token', response.token);
+        if (response.role) localStorage.setItem('role', response.role);
         if (response.user) localStorage.setItem('user', JSON.stringify(response.user));
         this.currentUserSubject.next(this.getUserFromStorage());
-      }),
-      catchError(() => {
-        // Fallback for demo / offline mode
-        let role = 'patient';
-        if (credentials.email?.includes('admin')) {
-          role = 'admin';
-        } else if (credentials.email?.includes('doctor')) {
-          role = 'doctor';
-        }
-
-        const mockUser: User = {
-          _id: 'u_' + Date.now(),
-          email: credentials.email || 'admin@tammeni.com',
-          role: role as 'patient' | 'doctor' | 'admin'
-        };
-        const mockToken = `mock_token_${Date.now()}`;
-        localStorage.setItem('token', mockToken);
-        localStorage.setItem('role', role);
-        localStorage.setItem('user', JSON.stringify(mockUser));
-        this.currentUserSubject.next(mockUser);
-        return of({ success: true, token: mockToken, user: mockUser, role: role });
       })
     );
   }
 
   register(data: any): Observable<any> {
-    const payload = {
-      email: data.email,
-      password: data.password,
-      role: data.role,
-    };
-
-    return this.http.post<any>(`${this.apiUrl}/register`, payload).pipe(
+    return this.http.post<any>(`${this.apiUrl}/register`, data).pipe(
       tap((response) => {
         const user: User = response.user || {
-          _id: 'u_' + Date.now(),
-          email: data.email,
-          role: data.role
+          _id: response._id,
+          email: response.email,
+          role: response.role
         };
-        const token = response.token || `mock_token_${Date.now()}`;
-        localStorage.setItem('token', token);
+        const token = response.token;
+        if (token) localStorage.setItem('token', token);
+        if (response.role) localStorage.setItem('role', response.role);
         localStorage.setItem('user', JSON.stringify(user));
         this.currentUserSubject.next(user);
-      }),
-      catchError(() => {
-        // Fallback offline registration
-        const mockUser: User = {
-          _id: 'u_' + Date.now(),
-          email: data.email,
-          role: data.role
-        };
-        const mockToken = `mock_token_${Date.now()}`;
-        localStorage.setItem('token', mockToken);
-        localStorage.setItem('user', JSON.stringify(mockUser));
-        this.currentUserSubject.next(mockUser);
-        return of({ success: true, token: mockToken, user: mockUser });
       })
     );
   }

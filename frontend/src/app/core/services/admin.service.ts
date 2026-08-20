@@ -79,17 +79,17 @@ export interface UserAdminModel {
   providedIn: 'root',
 })
 export class AdminService {
-  private apiUrl = `${environment.apiUrl || 'http://localhost:5000/api'}/admin`;
+  private apiUrl = `${environment.apiUrl}/admin`;
 
   constructor(private http: HttpClient) {}
 
   // 1. Dashboard Statistics
-  getDashboardStats(): Observable<AdminDashboardStats> {
-    return this.http.get<AdminDashboardStats>(`${this.apiUrl}/stats`);
+  getDashboardStats(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/stats`);
   }
 
   // 2. Doctors Management
-  getDoctors(params?: any): Observable<{ doctors: DoctorAdminModel[]; total: number }> {
+  getDoctors(params?: any): Observable<any> {
     let httpParams = new HttpParams();
     if (params) {
       Object.keys(params).forEach((key) => {
@@ -98,27 +98,27 @@ export class AdminService {
         }
       });
     }
-    return this.http.get<{ doctors: DoctorAdminModel[]; total: number }>(`${this.apiUrl}/doctors`, { params: httpParams });
+    return this.http.get<any>(`${this.apiUrl}/doctors`, { params: httpParams });
   }
 
-  addDoctor(doctorData: any): Observable<DoctorAdminModel> {
-    return this.http.post<DoctorAdminModel>(`${this.apiUrl}/doctors`, doctorData);
+  toggleDoctorStatus(id: string, is_active?: boolean): Observable<any> {
+    return this.http.put(`${this.apiUrl}/doctors/${id}/toggle-status`, { is_active });
   }
 
-  updateDoctor(id: string, doctorData: any): Observable<DoctorAdminModel> {
-    return this.http.put<DoctorAdminModel>(`${this.apiUrl}/doctors/${id}`, doctorData);
+  addDoctor(doctorData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/doctors`, doctorData);
   }
 
-  toggleDoctorStatus(id: string, is_active: boolean): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/doctors/${id}/status`, { is_active });
+  updateDoctor(id: string, doctorData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/doctors/${id}`, doctorData);
   }
 
   deleteDoctor(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/doctors/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/doctors/${id}`);
   }
 
   // 3. Patients Management
-  getPatients(params?: any): Observable<{ patients: PatientAdminModel[]; total: number }> {
+  getPatients(params?: any): Observable<any> {
     let httpParams = new HttpParams();
     if (params) {
       Object.keys(params).forEach((key) => {
@@ -127,15 +127,15 @@ export class AdminService {
         }
       });
     }
-    return this.http.get<{ patients: PatientAdminModel[]; total: number }>(`${this.apiUrl}/patients`, { params: httpParams });
+    return this.http.get<any>(`${this.apiUrl}/patients`, { params: httpParams });
   }
 
-  togglePatientStatus(id: string, is_active: boolean): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/patients/${id}/status`, { is_active });
+  togglePatientStatus(id: string, is_active?: boolean): Observable<any> {
+    return this.http.put(`${this.apiUrl}/patients/${id}/toggle-status`, { is_active });
   }
 
   // 4. Appointments Management
-  getAppointments(params?: any): Observable<{ appointments: any[]; total: number }> {
+  getAppointments(params?: any): Observable<any> {
     let httpParams = new HttpParams();
     if (params) {
       Object.keys(params).forEach((key) => {
@@ -144,15 +144,15 @@ export class AdminService {
         }
       });
     }
-    return this.http.get<{ appointments: any[]; total: number }>(`${this.apiUrl}/appointments`, { params: httpParams });
+    return this.http.get<any>(`${this.apiUrl}/appointments`, { params: httpParams });
   }
 
   updateAppointmentStatus(id: string, status: string): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/appointments/${id}/status`, { status });
+    return this.http.put(`${this.apiUrl}/appointments/${id}/status`, { status });
   }
 
   // 5. Reviews Management
-  getReviews(params?: any): Observable<{ reviews: ReviewAdminModel[]; total: number }> {
+  getReviews(params?: any): Observable<any> {
     let httpParams = new HttpParams();
     if (params) {
       Object.keys(params).forEach((key) => {
@@ -161,7 +161,7 @@ export class AdminService {
         }
       });
     }
-    return this.http.get<{ reviews: ReviewAdminModel[]; total: number }>(`${this.apiUrl}/reviews`, { params: httpParams });
+    return this.http.get<any>(`${this.apiUrl}/reviews`, { params: httpParams });
   }
 
   deleteReview(id: string): Observable<any> {
@@ -169,24 +169,24 @@ export class AdminService {
   }
 
   // 6. Specializations Management
-  getSpecializations(): Observable<SpecializationModel[]> {
-    return this.http.get<SpecializationModel[]>(`${this.apiUrl}/specializations`);
+  getSpecializations(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/specializations`);
   }
 
-  addSpecialization(specData: any): Observable<SpecializationModel> {
-    return this.http.post<SpecializationModel>(`${this.apiUrl}/specializations`, specData);
+  addSpecialization(specData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/specializations`, specData);
   }
 
-  updateSpecialization(id: string, specData: any): Observable<SpecializationModel> {
-    return this.http.put<SpecializationModel>(`${this.apiUrl}/specializations/${id}`, specData);
+  updateSpecialization(id: string, specData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/specializations/${id}`, specData);
   }
 
   deleteSpecialization(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/specializations/${id}`);
   }
 
-  // 7. User Accounts Management
-  getUsers(params?: any): Observable<{ users: UserAdminModel[]; total: number }> {
+  // 7. Users Management
+  getUsers(params?: any): Observable<any> {
     let httpParams = new HttpParams();
     if (params) {
       Object.keys(params).forEach((key) => {
@@ -195,14 +195,16 @@ export class AdminService {
         }
       });
     }
-    return this.http.get<{ users: UserAdminModel[]; total: number }>(`${this.apiUrl}/users`, { params: httpParams });
+    return this.http.get<any>(`${this.apiUrl}/users`, { params: httpParams });
   }
 
   updateUserRole(id: string, role: string): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/users/${id}/role`, { role });
+    return this.http.put(`${this.apiUrl}/users/${id}/role`, { role });
   }
 
-  toggleUserStatus(id: string, is_active: boolean): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/users/${id}/status`, { is_active });
+  toggleUserStatus(id: string, is_active?: boolean): Observable<any> {
+    return this.http.put(`${this.apiUrl}/users/${id}/toggle-status`, { is_active });
   }
+
+
 }

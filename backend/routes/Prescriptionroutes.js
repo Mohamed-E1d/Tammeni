@@ -10,7 +10,7 @@ const { protect, checkRole } = require("../middlewares/auth");
 
 // POST /api/prescriptions
 // Create a new prescription (Doctor only)
-router.route("/").post(protect, checkRole(["doctor"]), createPrescription);
+router.route("/").post(protect, checkRole("doctor"), createPrescription);
 
 // GET /api/prescriptions/appointment/:appointmentId
 // Fetch prescription for a specific appointment

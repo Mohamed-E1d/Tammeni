@@ -8,7 +8,16 @@ const Appointment = require('../models/Appointment');
  */
 const getMedicalHistory = async (req, res) => {
     try {
-        const { patientId } = req.params;
+        let { patientId } = req.params;
+
+        // If 'current' or 'me', find patient ID by req.user
+        if ((patientId === 'current' || patientId === 'me' || patientId === 'current_patient') && req.user) {
+            const Patient = require('../models/Patient');
+            const patientDoc = await Patient.findOne({ userId: req.user._id });
+            if (patientDoc) {
+                patientId = patientDoc._id.toString();
+            }
+        }
 
         if (!mongoose.Types.ObjectId.isValid(patientId)) {
             return res.status(400).json({ success: false, message: 'Invalid patient ID format' });

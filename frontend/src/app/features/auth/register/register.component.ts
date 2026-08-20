@@ -192,11 +192,7 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     const formVal = this.registerForm.value;
 
-    this.authService.register({
-      email: formVal.email,
-      password: formVal.password,
-      role: formVal.role,
-    }).subscribe({
+    this.authService.register(formVal).subscribe({
       next: () => {
         const role = formVal.role;
         if (role === 'patient') {

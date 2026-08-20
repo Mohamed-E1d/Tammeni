@@ -18,6 +18,7 @@ const medicationRoutes = require('./routes/Medicationroutes');
 const prescriptionRoutes = require('./routes/Prescriptionroutes');
 const reviewRoutes = require('./routes/ReviewRoutes');
 const medicalHistoryRoutes = require('./routes/medicalHistoryRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 
 // Load environment variables
@@ -67,6 +68,7 @@ app.use('/api/medications', medicationRoutes);
 app.use('/api/prescriptions', prescriptionRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/patients', medicalHistoryRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
 
 // 404 Handler
